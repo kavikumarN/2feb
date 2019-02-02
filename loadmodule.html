@@ -1,0 +1,18 @@
+<html>
+ <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Emscripten-Generated Code</title>
+ </head>
+<body>
+<script src="webp.js"></script>
+<script>
+  Module.onRuntimeInitialized = async _ => {
+    const api = {
+      version: Module.cwrap('version', 'number', []),
+    };
+    console.log(api.version());
+  };
+</script>
+</body>
+</html>

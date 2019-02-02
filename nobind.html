@@ -1,0 +1,37 @@
+<html>
+ <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Emscripten-Generated Code</title>
+ </head>
+<body>
+
+<script src="/a.out.js"></script>
+<script>
+  Module.onRuntimeInitialized = _ => {
+    const api = {
+      add: Module.cwrap('add', 'number', ['number', 'number']),
+      exclaim: Module.cwrap('exclaim', 'number', ['number']),
+      malloc: Module.cwrap('mymalloc', 'number', ['number']),
+      free: Module.cwrap('myfree', '', ['number'])
+    };
+
+    function add(a, b) {
+      return api.add(a, b);
+    }
+
+    function exclaim(str) {
+      const utf8 = new TextEncoder('utf-8').encode(str);
+      const p = api.malloc(utf8.byteLength);
+      Module.HEAP8.set(utf8, p);
+      const p2 = api.exclaim(p);
+      const resultView = new Uint8Array(Module.HEAP8.buffer, p2, utf8.byteLength + 1);
+      return new TextDecoder('utf-8').decode(resultView);
+    }
+    console.log(add(22, 20));
+    console.log(exclaim('Hello World'));
+  };
+</script>
+
+</body>
+</html>
